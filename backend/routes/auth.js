@@ -18,8 +18,8 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ username, password: hashedPassword });
     
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { id: user.id, username: user.username } });
+    const token = jwt.sign({ id: user.id, username: user.username, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, username: user.username, isAdmin: user.isAdmin } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -34,8 +34,8 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { id: user.id, username: user.username } });
+    const token = jwt.sign({ id: user.id, username: user.username, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, username: user.username, isAdmin: user.isAdmin } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/me', require('../middleware/auth'), async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id, { attributes: ['id', 'username'] });
+    const user = await User.findByPk(req.user.id, { attributes: ['id', 'username', 'isAdmin'] });
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -70,8 +70,8 @@ router.post('/google', async (req, res) => {
       user = await User.create({ username: email, password: null });
     }
 
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { id: user.id, username: user.username } });
+    const token = jwt.sign({ id: user.id, username: user.username, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, username: user.username, isAdmin: user.isAdmin } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

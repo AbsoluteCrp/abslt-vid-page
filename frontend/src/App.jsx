@@ -5,6 +5,7 @@ import VideoPlayer from './pages/VideoPlayer';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Upload from './pages/Upload';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -17,11 +17,16 @@ export default function Navbar() {
       <div className="container navbar-container">
         <Link to="/" className="logo">
           <PlaySquare size={24} color="var(--accent)" />
-          MinimalTube
+          Abslt Vid
         </Link>
         <div className="nav-links">
           {user ? (
             <>
+              {user.isAdmin && (
+                <Link to="/admin" className="btn btn-ghost" style={{ color: 'var(--primary)' }}>
+                  Admin
+                </Link>
+              )}
               <Link to="/upload" className="btn btn-ghost">
                 <Upload size={18} />
                 Subir

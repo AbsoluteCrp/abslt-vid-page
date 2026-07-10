@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
 const User = require('./User')(sequelize);
 const Video = require('./Video')(sequelize);
 const Comment = require('./Comment')(sequelize);
+const Subscription = require('./Subscription')(sequelize);
 
 // Associations
 User.hasMany(Video, { foreignKey: 'userId', as: 'videos' });
@@ -21,9 +22,13 @@ Comment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 Video.hasMany(Comment, { foreignKey: 'videoId', as: 'comments' });
 Comment.belongsTo(Video, { foreignKey: 'videoId', as: 'video' });
 
+User.belongsToMany(User, { through: Subscription, as: 'followers', foreignKey: 'channelId' });
+User.belongsToMany(User, { through: Subscription, as: 'following', foreignKey: 'followerId' });
+
 module.exports = {
   sequelize,
   User,
   Video,
-  Comment
+  Comment,
+  Subscription
 };
